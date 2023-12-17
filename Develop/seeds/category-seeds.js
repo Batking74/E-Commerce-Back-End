@@ -18,6 +18,7 @@ const categoryData = [
   },
 ];
 
+// INSERT INTO Category (category_name) VALUES('Shirts'), ....
 const seedCategories = () => Category.bulkCreate(categoryData);
 
 module.exports = seedCategories;

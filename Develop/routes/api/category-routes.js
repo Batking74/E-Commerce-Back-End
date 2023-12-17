@@ -3,26 +3,84 @@ const { Category, Product } = require('../../models');
 
 // The `/api/categories` endpoint
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   // find all categories
   // be sure to include its associated Products
+  try {
+    // find all categories with associated Products
+    const categories = await Category.findAll({ include: Product });
+    res.json(categories);
+  }
+  catch (error) {
+    console.error(`Something went wrong in the Category GET '/' route: ${error.message}`);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   // find one category by its `id` value
   // be sure to include its associated Products
+  const categoryId = req.params.id;
+  try {
+    // find one category by its `id` value with associated Products
+    const category = await Category.findByPk(categoryId, { include: Product });
+    
+    if (category) res.json(category);
+    else res.status(404).json({ error: 'Category not found' });
+  }
+  catch (error) {
+    console.error(`Something went wrong in the Category GET '/:${categoryId}' route: ${error.message}`);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   // create a new category
+  const { name } = req.body;
+
+  try {
+    const newCategory = await Category.create({ name });
+    res.json(newCategory);
+  }
+  catch(error) {
+    console.error(`Something went wrong in the Category POST '/' route: ${error.message}`);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   // update a category by its `id` value
+  const categoryId = req.params.id;
+  const { name } = req.body;
+  try {
+    // update a category by its `id` value
+    const [ updatedRows ] = await Category.update({ name }, { where: { id: categoryId } });
+
+    if (updatedRows > 0) res.json({ message: 'Category updated successfully' });
+    else res.status(404).json({ error: 'Category not found' });
+
+  }
+  catch (error) {
+    console.error(`Something went wrong in the Category PUT '/:${categoryId}' route: ${error.message}`);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   // delete a category by its `id` value
+  const categoryId = req.params.id;
+  try {
+    // delete a category by its `id` value
+    const deletedRows = await Category.destroy({ where: { id: categoryId } });
+    
+    if (deletedRows > 0) res.json({ message: 'Category deleted successfully' });
+    else res.status(404).json({ error: 'Category not found' });
+
+  }
+  catch (error) {
+    console.error(`Something went wrong in the Category DELETE '/:${categoryId}' route: ${error.message}`);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 module.exports = router;

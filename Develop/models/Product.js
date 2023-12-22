@@ -24,4 +24,6 @@ Product.init(
   }
 );
 
+
+// Exporting Module
 module.exports = Product;

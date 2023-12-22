@@ -1,3 +1,4 @@
+// Importing Packages
 const { Model, DataTypes, DATE } = require('sequelize');
 
 const sequelize = require('../config/connection.js');
@@ -18,4 +19,6 @@ Tag.init(
   }
 );
 
+
+// Exporting Module
 module.exports = Tag;

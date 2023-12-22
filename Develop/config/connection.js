@@ -1,4 +1,4 @@
-// Importing Packages
+// Importing Packages/Modules
 const Sequelize = require('sequelize');
 const path = require('path');
 const envPath = path.join(__dirname, '../.env');

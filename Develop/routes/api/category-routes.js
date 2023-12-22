@@ -1,13 +1,12 @@
+// Importing Modules/Packages
 const router = require('express').Router();
 const { Category, Product } = require('../../models');
 
-// The `/api/categories` endpoint
 
+// Read Route
 router.get('/', async (req, res) => {
-  // find all categories
-  // be sure to include its associated Products
   try {
-    // find all categories with associated Products
+    // gets all categories with associated Products
     const categories = await Category.findAll({ include: Product });
     res.json(categories);
   }
@@ -17,14 +16,14 @@ router.get('/', async (req, res) => {
   }
 });
 
+
+// Read Route
 router.get('/:id', async (req, res) => {
-  // find one category by its `id` value
-  // be sure to include its associated Products
-  const categoryId = req.params.id;
   try {
-    // find one category by its `id` value with associated Products
+    const categoryId = parseInt(req.params.id.replace(':', ''));
+
+    // gets one category by its `id` value with associated Products
     const category = await Category.findByPk(categoryId, { include: Product });
-    
     if (category) res.json(category);
     else res.status(404).json({ error: 'Category not found' });
   }
@@ -34,10 +33,11 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+
+// Create Route
 router.post('/', async (req, res) => {
   // create a new category
   const { name } = req.body;
-
   try {
     const newCategory = await Category.create({ name });
     res.json(newCategory);
@@ -48,12 +48,13 @@ router.post('/', async (req, res) => {
   }
 });
 
+
+// Update Route
 router.put('/:id', async (req, res) => {
-  // update a category by its `id` value
   const categoryId = req.params.id;
   const { name } = req.body;
   try {
-    // update a category by its `id` value
+    // updates a category by its `id` value
     const [ updatedRows ] = await Category.update({ name }, { where: { id: categoryId } });
 
     if (updatedRows > 0) res.json({ message: 'Category updated successfully' });
@@ -66,8 +67,9 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+
+// Delete Route
 router.delete('/:id', async (req, res) => {
-  // delete a category by its `id` value
   const categoryId = req.params.id;
   try {
     // delete a category by its `id` value
@@ -83,4 +85,6 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+
+// Exporting Module
 module.exports = router;

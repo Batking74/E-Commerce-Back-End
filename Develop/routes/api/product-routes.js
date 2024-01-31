@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     // finding a single product by its id
-    const productId = req.params.id;
+    const productId = parseInt(req.params.id.replace(':', ''));
     const product = await Product.findByPk(productId, {
       include: [
         {
@@ -57,14 +57,6 @@ router.get('/:id', async (req, res) => {
 
 // create new product
 router.post('/', (req, res) => {
-  /* req.body should look like this...
-    {
-      product_name: "Basketball",
-      price: 200.00,
-      stock: 3,
-      tagIds: [1, 2, 3, 4]
-    }
-  */
   Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
@@ -92,13 +84,13 @@ router.put('/:id', (req, res) => {
   // update product data
   Product.update(req.body, {
     where: {
-      id: req.params.id,
+      id: parseInt(req.params.id.replace(':', '')),
     },
   })
     .then((product) => {
       if (req.body.tagIds && req.body.tagIds.length) {
         ProductTag.findAll({
-          where: { product_id: req.params.id }
+          where: { product_id: parseInt(req.params.id.replace(':', '')) }
         }).then((productTags) => {
 
           // create filtered list of new tag_ids
@@ -107,7 +99,7 @@ router.put('/:id', (req, res) => {
           .filter((tag_id) => !productTagIds.includes(tag_id))
           .map((tag_id) => {
             return {
-              product_id: req.params.id,
+              product_id: parseInt(req.params.id.replace(':', '')),
               tag_id,
             };
           });
@@ -134,7 +126,7 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // delete one product by its `id` value
-  Product.destroy({ where: { id: req.params.id } })
+  Product.destroy({ where: { id: parseInt(req.params.id.replace(':', '')) } })
   .then((deletedProduct) => {
     if (deletedProduct === 0) {
       res.status(404).json({ message: 'Sorry Product was not found...' });

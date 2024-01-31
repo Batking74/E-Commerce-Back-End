@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 });
 
 
-// Read Route
+// Read Specific Data Route
 router.get('/:id', async (req, res) => {
   try {
     const categoryId = parseInt(req.params.id.replace(':', ''));
@@ -51,7 +51,7 @@ router.post('/', async (req, res) => {
 
 // Update Route
 router.put('/:id', async (req, res) => {
-  const categoryId = req.params.id;
+  const categoryId = parseInt(req.params.id.replace(':', ''));
   const { name } = req.body;
   try {
     // updates a category by its `id` value
@@ -70,7 +70,7 @@ router.put('/:id', async (req, res) => {
 
 // Delete Route
 router.delete('/:id', async (req, res) => {
-  const categoryId = req.params.id;
+  const categoryId = parseInt(req.params.id.replace(':', ''));
   try {
     // delete a category by its `id` value
     const deletedRows = await Category.destroy({ where: { id: categoryId } });

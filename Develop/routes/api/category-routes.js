@@ -38,8 +38,12 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   // create a new category
   const { name } = req.body;
+  if(name === '' || name === null) {
+    res.status(500).json({ error: 'Not a valid response' });
+    return;
+  }
   try {
-    const newCategory = await Category.create({ name });
+    const newCategory = await Category.create({ category_name: name });
     res.json(newCategory);
   }
   catch(error) {

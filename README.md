@@ -50,6 +50,6 @@ node server.js
 - sequelize
 
 
-Video of Application:
+Video of Application: https://youtu.be/m4X8JRLsjcQ
 
 GitHub Repo: https://github.com/Batking74/Employee-Tracker

@@ -52,4 +52,4 @@ node server.js
 
 Video of Application: https://youtu.be/m4X8JRLsjcQ
 
-GitHub Repo: https://github.com/Batking74/Employee-Tracker
+GitHub Repo: https://github.com/Batking74/E-Commerce-Back-End
